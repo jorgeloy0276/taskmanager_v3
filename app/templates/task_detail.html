@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Detalles de la Tarea: {{ task.id }}</h1>
+    <div class="bg-white p-6 rounded-lg shadow">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p><strong>Título:</strong> {{ task.title }}</p>
+                <p><strong>Estado:</strong> {{ task.status|capitalize }}</p>
+                <p><strong>Fecha de Creación:</strong> {{ task.created_at }}</p>
+                <p><strong>Fecha de Cierre:</strong> {{ task.closed_at or 'N/A' }}</p>
+            </div>
+            <div>
+                <p><strong>Descripción:</strong></p>
+                <pre class="bg-gray-100 p-4 rounded whitespace-pre-wrap">{{ task.description }}</pre>
+            </div>
+        </div>
+        <div class="mt-6 flex space-x-4">
+            <a href="{{ url_for('edit_task', task_id=task.id) }}" class="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                Editar
+            </a>
+            <a href="{{ url_for('index') }}" class="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                Volver
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

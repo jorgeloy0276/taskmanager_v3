@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 " />
+  <title>Administrador de Tareas Version 3.0</title>
+  <!-- <link rel="stylesheet" href="./app/static/css/styles.css"> -->
+  <!-- <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"> -->
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon.png') }}" rel="favicon.png">
+  <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 font-sans overflow-x-hidden">
+  <nav class="bg-blue-600 p-4 text-white">
+    <ul class="flex space-x-6">
+      <li>
+        <a href="{{ url_for('index') }}" class="flex items-center"><svg class="w-5 h-5 mr-1" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"></path>
+          </svg>
+          Tareas</a>
+      </li>
+      <li>
+        <a href="{{ url_for('add_task') }}" class="flex items-center"><svg class="w-5 h-5 mr-1" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Nueva Tarea</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="container mx-auto p-4 w-[100%] md:w-[60%] ">
+    <!-- Spinner centrado -->
+    <div id="loading" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden">
+      <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+    {% block content %}{% endblock %}
+  </div>
+  <!-- Footer Creditos -->
+  <div class=" grid w-full md:w-[60%] mx-auto h-20 lg:h-10 justify-center  bg-gray-400 shadow shadow-gray-700">
+    <p class="text-white text-shadow-md text-lg text-center">Desarrollado por Jorge E. Hernandez Copyright todos los
+      derechos reservados &copy; 2025 Version 3.0</p>
+  </div>
+  <!-- JavaScript para el loading -->
+  <script>
+    function showLoading() {
+      document.getElementById("loading").classList.remove("hidden");
+    }
+
+    function hideLoading() {
+      document.getElementById("loading").classList.add("hidden");
+    }
+
+    // Para formularios
+    document.querySelectorAll("form").forEach((form) => {
+      form.addEventListener("submit", function () {
+        showLoading();
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton) {
+          submitButton.disabled = true;
+        }
+      });
+    });
+
+    // Para enlaces de filtro
+    document.querySelectorAll(".filter-link").forEach((link) => {
+      link.addEventListener("click", function () {
+        showLoading();
+      });
+    });
+
+    // Ocultar loading cuando la página esté completamente cargada
+    window.addEventListener("load", hideLoading);
+  </script>
+</body>
+
+</html>

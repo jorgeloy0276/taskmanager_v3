@@ -1,0 +1,256 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="text-2xl font-bold mb-4">Lista de Tareas</h1>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+  {% for status, count in summary.items() %}
+  <a
+    href="{{ url_for('index', status=status) }}"
+    class="filter-link bg-white p-4 rounded-lg shadow-md flex items-center transition-all duration-200 {% if status_filter == status %}bg-blue-200 border-2 border-blue-600 text-blue-800 font-semibold{% else %}hover:bg-gray-50 hover:shadow-lg{% endif %}"
+  >
+    <div class="flex items-center">
+      {% if status == 'creada' %}
+      <svg
+        class="w-5 h-5 mr-2 text-yellow-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+        ></path>
+      </svg>
+      {% elif status == 'en proceso' %}
+      <svg
+        class="w-5 h-5 mr-2 text-blue-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M14.752 11.168l-3.197-2.2A1 1 0 0010 9.768v4.464a1 1 0 001.555.832l3.197-2.2a1 1 0 000-1.664z"
+        ></path>
+      </svg>
+      {% elif status == 'en espera' %}
+      <svg
+        class="w-5 h-5 mr-2 text-gray-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+      {% elif status == 'cancelado' %}
+      <svg
+        class="w-5 h-5 mr-2 text-red-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+      {% elif status == 'terminado' %}
+      <svg
+        class="w-5 h-5 mr-2 text-green-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 13l4 4L19 7"
+        ></path>
+      </svg>
+      {% endif %}
+      <h2 class="text-lg">{{ status|capitalize }}</h2>
+    </div>
+    <p class="text-2xl ml-auto">{{ count }}</p>
+  </a>
+  {% endfor %}
+</div>
+<!-- Botón para mostrar todas las tareas y barra de búsqueda -->
+<div
+  class="mb-4 grid items-center md:grid-rows-1 sm:grid-cols-1 gap-2 x space-x-4"
+>
+  <a
+    href="{{ url_for('index') }}"
+    class=" w-full md:w-[12%]  xs:text-center filter-link bg-gray-600 text-white px-4 py-3 rounded-lg shadow-md hover:bg-gray-700 transition-all duration-200 {% if not status_filter %}bg-gray-800 font-semibold{% endif %}"
+  >
+    Mostrar Todas
+  </a>
+  <form
+    method="GET"
+    action="{{ url_for('index') }}"
+    class="flex md:grid-rows-1 sm:grid-cols-1 w-full max-w-lg gap-2.5"
+  >
+    <div class="relative w-full">
+      <input
+        class="w-full md:my-3 p-2 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="text"
+        name="search"
+        value="{{ search_query or '' }}"
+        placeholder="Buscar por título..."
+      />
+      <svg
+        class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        ></path>
+      </svg>
+    </div>
+    <button
+      type="submit"
+      class="md:w-[40%] sm:w-[100%] md:my-4 ml-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-blue-300"
+    >
+      Buscar
+    </button>
+  </form>
+</div>
+<!-- Mensaje de filtro activo -->
+<div class="mb-4 text-gray-700">
+  {% if status_filter or search_query %}
+  <p>
+    Mostrando tareas: {% if status_filter %}<span
+      class="font-semibold text-blue-600"
+      >{{ status_filter|capitalize }}</span
+    >{% endif %} {% if status_filter and search_query %} con {% endif %} {% if
+    search_query %}"<span class="font-semibold text-blue-600"
+      >{{ search_query }}</span
+    >"{% endif %}
+  </p>
+  {% else %}
+  <p>Mostrando todas las tareas</p>
+  {% endif %}
+</div>
+<!-- Para ajustar la tabla -->
+<div class="w-full md:w-[100%] text-sm md:text-1xl overflow-x-hidden max-w-full">
+  <table class="w-full bg-white shadow rounded">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="p-2">ID</th>
+        <th class="p-2">Título</th>
+        <th class="p-2">Estado</th>
+        <th class="p-2">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+      <tr>
+        <td class="p-2">{{ task.id }}</td>
+        <td class="p-2">{{ task.title }}</td>
+        <td class="p-2 flex items-center">
+          {% if task.status == 'creada' %}
+          <svg
+            class="w-5 h-5 mr-2 text-yellow-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            ></path>
+          </svg>
+          {% elif task.status == 'en proceso' %}
+          <svg
+            class="w-5 h-5 mr-2 text-blue-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14.752 11.168l-3.197-2.2A1 1 0 0010 9.768v4.464a1 1 0 001.555.832l3.197-2.2a1 1 0 000-1.664z"
+            ></path>
+          </svg>
+          {% elif task.status == 'en espera' %}
+          <svg
+            class="w-5 h-5 mr-2 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          {% elif task.status == 'cancelado' %}
+          <svg
+            class="w-5 h-5 mr-2 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+          {% elif task.status == 'terminado' %}
+          <svg
+            class="w-5 h-5 mr-2 text-green-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+          {% endif %} {{ task.status|capitalize }}
+        </td>
+        <td class="p-2">
+          <a
+            href="{{ url_for('task_detail', task_id=task.id) }}"
+            class="text-blue-500"
+            >Ver</a
+          >
+          |
+          <a
+            href="{{ url_for('edit_task', task_id=task.id) }}"
+            class="text-green-500"
+            >Editar</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
