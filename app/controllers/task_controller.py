@@ -22,6 +22,26 @@ def send_notification(task, action):
     )
     mail.send(msg)
 
+def send_email():
+   print("Enviando correo...")
+  
+   msg = Message(
+       subject="Correo de prueba",
+       sender="admin@example.com",
+       recipients=['jorgeloy0276@gmail.com'],
+       html="Esto es un correo de prueba."
+   )
+
+   try:
+    mail.send(msg)
+    print("Correo enviado correctamente.")
+   except Exception as e:
+       print(f"Error al enviar el correo: {str(e)}")
+       return "Error al enviar el correo", 500
+
+   return "Correo enviado correctamente", 200
+   
+
 def index():
     # Obtenemos el filtro de estado y la búsqueda desde los parámetros de la URL
     status_filter = request.args.get('status', None)

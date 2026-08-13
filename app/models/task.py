@@ -60,6 +60,10 @@ class Task:
         db.close()
         return Task(*row) if row else None
 
+    def delete_task(self):
+        pass
+
+    
     def append_description(self, new_desc):
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.description = f"{self.description}\n--- {timestamp} ---\n{new_desc}" if self.description else new_desc

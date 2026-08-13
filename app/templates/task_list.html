@@ -90,10 +90,15 @@
 >
   <a
     href="{{ url_for('index') }}"
-    class=" w-full md:w-[12%]  xs:text-center filter-link bg-gray-600 text-white px-4 py-3 rounded-lg shadow-md hover:bg-gray-700 transition-all duration-200 {% if not status_filter %}bg-gray-800 font-semibold{% endif %}"
+    class=" w-full md:w-[24%]  xs:text-center filter-link bg-gray-600 text-white px-4 py-3 rounded-lg shadow-md hover:bg-gray-700 transition-all duration-200 {% if not status_filter %}bg-gray-800 font-semibold{% endif %}"
   >
     Mostrar Todas
   </a>
+  <!-- Botón para enviar correo Temporal -->
+  <!-- <a href="{{ url_for('send_email') }}"
+    class=" w-full md:w-[24%]  xs:text-center filter-link bg-cyan-600 text-white px-4 py-3 rounded-lg shadow-md hover:bg-cyan-700 transition-all duration-200 ">
+   Enviar Correo
+  </a> -->
   <form
     method="GET"
     action="{{ url_for('index') }}"
