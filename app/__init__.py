@@ -14,7 +14,7 @@ def create_app():
     mail.init_app(app)
 
     # Importamos los controladores después de inicializar la app
-    from app.controllers.task_controller import index, add_task, edit_task, task_detail, send_email
+    from app.controllers.task_controller import index, add_task, edit_task, task_detail, send_email, delete_task
 
     # Registramos las rutas
     app.route('/')(index)
