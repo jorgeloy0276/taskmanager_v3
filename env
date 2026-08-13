@@ -1,7 +1,0 @@
- MYSQL_HOST=jorgeloy0276.mysql.pythonanywhere-services.com
-MYSQL_USER=jorgeloy0276
-MYSQL_PASSWORD=Krypt0n507%
-MYSQL_DB=jorgeloy0276$task_manager
-SECRET_KEY=taskmanagerappweb
-MAIL_USERNAME=jorgeloy0276@gmail.com
-MAIL_PASSWORD=ybdb beyz tbim hjtd
