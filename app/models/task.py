@@ -60,10 +60,16 @@ class Task:
         db.close()
         return Task(*row) if row else None
 
-    def delete_task(self):
+    def delete(task_id):
+        db = Task.connect()
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM tasks WHERE id=%s", (task_id,))
+        db.commit()
+        cursor.close()
+        db.close()
         pass
 
-    
+
     def append_description(self, new_desc):
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.description = f"{self.description}\n--- {timestamp} ---\n{new_desc}" if self.description else new_desc

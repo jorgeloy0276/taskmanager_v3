@@ -96,3 +96,8 @@ def edit_task(task_id):
 def task_detail(task_id):
     task = Task.get_by_id(task_id)
     return render_template('task_detail.html', task=task)
+
+
+def delete_task(task_id):
+    Task.delete(task_id)
+    return redirect(url_for('index'))
