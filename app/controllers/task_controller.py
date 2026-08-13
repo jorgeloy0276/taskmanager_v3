@@ -100,4 +100,5 @@ def task_detail(task_id):
 
 def delete_task(task_id):
     Task.delete(task_id)
+    send_notification(task_id, "Eliminada")
     return redirect(url_for('index'))
