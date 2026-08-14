@@ -4,6 +4,12 @@ from flask_mail import Message
 from config import Config
 from app import mail  # Importamos mail desde __init__.py
 import datetime
+import os
+from brevo import Brevo
+from brevo.transactional_emails import (
+    SendTransacEmailRequestSender,
+    SendTransacEmailRequestToItem,
+)
 
 def send_notification(task, action):
     msg = Message(
@@ -23,24 +29,63 @@ def send_notification(task, action):
     mail.send(msg)
 
 def send_email():
-   print("Enviando correo...")
-  
-   msg = Message(
-       subject="Correo de prueba",
-       sender="admin@example.com",
-       recipients=['jorgeloy0276@gmail.com'],
-       html="Esto es un correo de prueba."
-   )
+    print("Enviando correo...")
+    # Configuracion para Brevo
+    api_key = os.environ.get("BREVO_API_KEY")
+    print(api_key)
+    sender_email = os.environ.get("BREVO_SENDER_EMAIL")
+    sender_name = os.environ.get("BREVO_SENDER_NAME")
 
-   try:
-    mail.send(msg)
-    print("Correo enviado correctamente.")
-   except Exception as e:
-       print(f"Error al enviar el correo: {str(e)}")
-       return "Error al enviar el correo", 500
-
-   return "Correo enviado correctamente", 200
+    client = Brevo(api_key=api_key)
    
+    try:
+
+        resultado = client.transactional_emails.send_transac_email(
+            subject='Prueba con Brevo SMTP local',
+
+            html_content='<h1>Esto es una prueba</h1>',
+
+            sender=SendTransacEmailRequestSender(
+                name=sender_name,
+                email=sender_email
+            ),
+
+            to=[
+                SendTransacEmailRequestToItem(
+                    email='kryptonlogicpty@gmail.com',
+                    name='Krypton Logic Pty'
+                )
+            ]
+        )
+
+        print("Correo enviado:", resultado.message_id)
+
+        return "Correo enviado:", resultado.message_id
+
+    except Exception as e:
+
+        print("Error enviando correo:", e)
+
+        return "Error enviando correo:" + str(e)
+
+#  ===========================================================================
+#   Normal SMTP con gmail
+#    msg = Message(
+#        subject="Correo de prueba",
+#        sender="admin@example.com",
+#        recipients=['jorgeloy0276@gmail.com'],
+#        html="Esto es un correo de prueba."
+#    )
+
+#    try:
+#     mail.send(msg)
+#     print("Correo enviado correctamente.")
+#    except Exception as e:
+#        print(f"Error al enviar el correo: {str(e)}")
+#        return "Error al enviar el correo", 500
+
+    # return "Correo enviado correctamente", 200
+#  ===========================================================================
 
 def index():
     # Obtenemos el filtro de estado y la búsqueda desde los parámetros de la URL

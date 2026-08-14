@@ -21,9 +21,22 @@ class Config:
     MYSQL_DB = os.getenv('MYSQL_DB', 'task_manager')
     MYSQL_SSL_CA = _resolver_ca()
     SECRET_KEY = os.getenv('SECRET_KEY', 'default')
+
+    # Gmail
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'your_email@gmail.com')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'your_app_password')
+
+    # Brevo
+    MAIL_SERVER = 'smtp.brevo.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'your_email@gmail.com')
+    # MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'your_app_password')
+    BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
+    BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL")
+    BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME")
