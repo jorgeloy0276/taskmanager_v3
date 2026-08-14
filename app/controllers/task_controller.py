@@ -59,14 +59,14 @@ def send_email():
         )
 
         print("Correo enviado:", resultado.message_id)
-
-        return "Correo enviado:", resultado.message_id
+        return redirect(url_for('index'))
+        # return "Correo enviado:", resultado.message_id
 
     except Exception as e:
 
         print("Error enviando correo:", e)
-
-        return "Error enviando correo:" + str(e)
+        return redirect(url_for('index'))
+        
 
 #  ===========================================================================
 #   Normal SMTP con gmail
