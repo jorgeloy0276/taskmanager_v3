@@ -12,24 +12,60 @@ from brevo.transactional_emails import (
 )
 
 def send_notification(task, action):
-    msg = Message(
-        subject=f"Tarea {action}: {task.id}",
-        sender=Config.MAIL_USERNAME,
-        recipients=['jorgeloy0276@gmail.com'],
-        html=f"""
-        <h2>Tarea {action}</h2>
-        <p><strong>ID:</strong> {task.id}</p>
-        <p><strong>Título:</strong> {task.title}</p>
-        <p><strong>Estado:</strong> {task.status}</p>
-        <p><strong>Descripción:</strong><pre>{task.description}</pre></p>
-        <p><strong>Fecha Creación:</strong> {task.created_at}</p>
-        <p><strong>Fecha Cierre:</strong> {task.closed_at or 'N/A'}</p>
-        """
-    )
-    mail.send(msg)
+    # Configuración para Brevo
+    api_key = os.environ.get("BREVO_API_KEY")
+    print(api_key)
+    sender_email = os.environ.get("BREVO_SENDER_EMAIL")
+    sender_name = os.environ.get("BREVO_SENDER_NAME")
+
+    client = Brevo(api_key=api_key)
+   
+    try:
+
+        resultado = client.transactional_emails.send_transac_email(
+            subject=f"Tarea {action}: {task.id}",
+
+            html_content=f"""
+            <h2>Tarea {action}</h2>
+            <p><strong>ID:</strong> {task.id}</p>
+            <p><strong>Título:</strong> {task.title}</p>
+            <p><strong>Estado:</strong> {task.status}</p>
+            <p><strong>Descripción:</strong><pre>{task.description}</pre></p>
+            <p><strong>Fecha Creación:</strong> {task.created_at}</p>
+            <p><strong>Fecha Cierre:</strong> {task.closed_at or 'N/A'}</p>
+            """,
+
+            sender=SendTransacEmailRequestSender(
+                name=sender_name,
+                email=sender_email,
+            ),
+
+            to=[SendTransacEmailRequestToItem(email="jorgeloy0276@gmail.com")],
+        )
+        print(resultado)
+    except Exception as e:
+        print(e)
+
+
+    # Configuración para Gmail
+    # msg = Message(
+    #     subject=f"Tarea {action}: {task.id}",
+    #     sender=Config.MAIL_USERNAME,
+    #     recipients=['jorgeloy0276@gmail.com'],
+    #     html=f"""
+    #     <h2>Tarea {action}</h2>
+    #     <p><strong>ID:</strong> {task.id}</p>
+    #     <p><strong>Título:</strong> {task.title}</p>
+    #     <p><strong>Estado:</strong> {task.status}</p>
+    #     <p><strong>Descripción:</strong><pre>{task.description}</pre></p>
+    #     <p><strong>Fecha Creación:</strong> {task.created_at}</p>
+    #     <p><strong>Fecha Cierre:</strong> {task.closed_at or 'N/A'}</p>
+    #     """
+    # )
+    # mail.send(msg)
 
 def send_email():
-    print("Enviando correo...")
+   
     # Configuracion para Brevo
     api_key = os.environ.get("BREVO_API_KEY")
     print(api_key)
