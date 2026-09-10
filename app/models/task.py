@@ -26,9 +26,18 @@ class Task:
         db = self.connect()
         cursor = db.cursor()
         if not self.id:
-            cursor.execute("SELECT COUNT(*) FROM tasks")
-            count = cursor.fetchone()[0] + 1
-            self.id = f"TSK-{str(count).zfill(4)}"
+            # cursor.execute("SELECT COUNT(*) FROM tasks")
+            cursor.execute("SELECT id FROM tasks ORDER BY id DESC LIMIT 1")
+            # count = cursor.fetchone()[0] + 1
+            strsequence =cursor.fetchone()[0]
+            sequence = int(strsequence[4:8])
+            sequence = sequence + 1
+            # sequence = int(strsequence) +1
+            print(sequence)
+            input("Espera 1")
+            self.id = f"TSK-{str(sequence).zfill(4)}"
+            print(self.id)
+            input("Espera 2 ")
             query = "INSERT INTO tasks (id, title, description, status) VALUES (%s, %s, %s, %s)"
             values = (self.id, self.title, self.description, self.status)
         else:
